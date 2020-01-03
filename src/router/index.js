@@ -57,7 +57,7 @@ const routes = [{
       title: '仓库列表',
       icon: 'set'
     },
-    component: () => import('../views/index/index.vue')
+    component: () => import('../views/storage/list.vue')
   }, {
     path: 'detail',
     name: 'storage-detail',

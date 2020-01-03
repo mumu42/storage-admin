@@ -1,9 +1,11 @@
 <template>
   <div class='app-layout'>
-    <sidebar :collapse=collapse></sidebar>
-    <div class='app-content'>
+    <sidebar :collapse="collapse"></sidebar>
+    <div class="app-content">
       <navbar @fold='fold' @unfold='unfold'/>
-      <router-view></router-view>
+      <div class="app-contents">
+        <router-view></router-view>
+      </div>
     </div>
   </div>
 </template>
@@ -43,5 +45,10 @@ export default {
 }
 .app-content {
   flex: 1;
+}
+.app-contents {
+  margin: 20px;
+  padding: 30px;
+  box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1)
 }
 </style>
