@@ -7,7 +7,7 @@
     text-color="#fff"
     active-text-color="#ffd04b">
     <template v-for='(item) in routes'>
-      <el-submenu :index="item.path" v-if="item.children.length" :key="item.path">
+      <el-submenu :index="item.path" v-if="item.children.length > 1" :key="item.path">
         <template slot="title">
           <svg-icon :icon-class="item.icon"/>
           <span>{{item.title}}</span>
@@ -21,10 +21,10 @@
           </router-link>
         </el-menu-item-group>
       </el-submenu>
-      <router-link v-else :to="item.path" tag='span' @click="activeBar = item.path" :key="item.path">
-        <el-menu-item :index="item.path" >
-          <svg-icon :icon-class="item.icon"/>
-          <span slot="title">{{item.title}}</span>
+      <router-link v-else-if="item.children.length" :to="item.children[0].path" tag='span' @click="activeBar = item.children[0].path" :key="item.children[0].path">
+        <el-menu-item :index="item.children[0].path" >
+          <svg-icon :icon-class="item.children[0].icon"/>
+          <span slot="title">{{item.children[0].title}}</span>
         </el-menu-item>
       </router-link>
     </template>
@@ -39,7 +39,6 @@ export default {
     }
   },
   setup(props, cxt) {
-    window.console.log(cxt, 'props')
     const state = {
       activeBar: '/home/edit',
       router: () => {

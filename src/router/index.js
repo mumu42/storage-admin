@@ -5,7 +5,7 @@ Vue.use(VueRouter)
 
 const routes = [{
   path: '/',
-  redirect: '/home'
+  redirect: '/login'
 }, {
   path: '/home',
   name: 'layout',
@@ -15,32 +15,13 @@ const routes = [{
   },
   component: () => import('../views/layout/layout.vue'),
   children: [{
-    path: 'edit',
-    name: 'admin-edit',
-    meta: {
-      title: '编辑管理员',
-      icon: 'set'
-    },
-    component: () => import('../views/index/index.vue')
-  }, {
     path: 'list',
     name: 'admin-list',
     meta: {
       title: '管理员列表',
       icon: 'set'
     },
-    component: () => import('../views/index/index.vue'),
-    children: [
-      {
-        path: 'delete',
-        name: 'admin-delete',
-        meta: {
-          title: '删除管理员',
-          icon: 'set'
-        },
-        component: () => import('../views/index/index.vue')
-      }
-    ]
+    component: () => import('../views/admin/list.vue')
   }]
 }, {
   path: '/storage',
@@ -75,6 +56,9 @@ const routes = [{
     },
     component: () => import('../views/index/index.vue')
   }]
+}, {
+  path: '/login',
+  component: () => import('../views/login/login.vue')
 }]
 
 const router = new VueRouter({

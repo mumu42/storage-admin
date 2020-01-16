@@ -1,5 +1,13 @@
 const path = require('path')
 module.exports = {
+  devServer: {
+    proxy: {
+      '/': {
+        target: 'http://localhost:0103',
+        changeOrigin: true
+      }
+    }
+  },
   chainWebpack: config => {
     config.module
       .rule('svg')
