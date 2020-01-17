@@ -12,8 +12,8 @@
         width="55">
       </el-table-column>
       <el-table-column
-        label="昵称">
-        <template slot-scope="scope">{{ scope.row.date }}</template>
+        label="昵称"
+        prop="nickname">
       </el-table-column>
       <el-table-column
         label="操作"
@@ -39,13 +39,16 @@
 import TopHandle from '../../components/top-handle'
 import BottomHandle from '../../components/bottom-handle'
 import { toRefs, reactive } from '@vue/composition-api'
+import { add, getList } from '../../api/admin.js'
+import md5 from 'js-md5'
 export default {
   name: 'admin',
   components: {
     TopHandle,
     BottomHandle
   },
-  setup() {
+  setup(props, ctx) {
+    const that = ctx.root
     const state = reactive({
       nickname: '',
       tableData: [],
@@ -58,12 +61,30 @@ export default {
 
     }
     const addNewAdmin = () => {
-
+      add({
+        nickname: state.nickname,
+        password: md5('123456')
+      }).then((res) => {
+        let prompt = '新管理员添加成功，默认密码为123456，登录了之后请修改密码~'
+        if (res.code !== 200) {
+          prompt = '新管理员添加失败，请重试~'
+        }
+        state.dialogFormVisible = false
+        that.$alert(prompt, '提示', {
+          confirmButtonText: '确定'
+        })
+      })
     }
     const del = () => {
 
     }
+    getList().then(res => {
+      if (res.code === 200) {
+        state.tableData = res.result
+      }
+    })
     return {
+      sizeBtn: 'small',
       addAdmin,
       addNewAdmin,
       del,

@@ -1,5 +1,5 @@
 import axios from 'axios'
-import {Message} from 'element-ui'
+import { Message } from 'element-ui'
 import { getToken } from '../common'
 
 axios.defaults.timeout = 30 * 1000
@@ -32,11 +32,21 @@ function request (params) {
     let param = {
       ...params
     }
+    const expires = getToken()
     param['headers'] = {
-      token: getToken()
+      token: expires && expires.token,
+      id: expires && expires.userId
     }
     axios(param).then(rs => {
-      resolve(rs.data)
+      if (rs.data.code === 403) {
+        Message({
+          message: '登录权限已失效，请重新登录~',
+          type: 'error'
+        })
+        window.location.href = window.location.origin
+      } else {
+        resolve(rs.data)
+      }
     }, (err) => {
       reject(err)
     })

@@ -16,6 +16,7 @@
 <script>
 import { reactive, toRefs } from '@vue/composition-api'
 import { loginFun } from '../../api/admin.js'
+import { setToken } from '../../common'
 import md5 from 'js-md5'
 export default {
   setup(props, ctx) {
@@ -26,18 +27,14 @@ export default {
       logo: 'greeting'
     })
     const onSubmit = () => {
+      // 登录
       loginFun({
         nickname: state.nickname,
         password: md5(state.password)
       }).then(res => {
         if (res.code === 200) {
-          const { token, id } = res.result
-          const expires = {
-            token,
-            date: new Date().getTime(),
-            userId: id
-          }
-          window.localStorage.setItem('expires', JSON.stringify(expires))
+          const { id } = res.result
+          setToken({id})
           that.$router.push('/home')
         } else {
           that.$message.error(res.msg)
@@ -46,6 +43,7 @@ export default {
         that.$message.error(err)
       })
     }
+    // 重置
     const reset = () => {
       state.nickname = ''
       state.password = ''
