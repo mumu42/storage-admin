@@ -33,7 +33,12 @@ export default {
         password: md5(state.password)
       }).then(res => {
         if (res.code === 200) {
-          const { id } = res.result
+          const id = res.result.detail.id
+          that.$store.commit('setUser', {
+            isAdmin: res.result.detail.isAdmin,
+            userName: res.result.detail.nickname,
+            userId: id
+          })
           setToken({id})
           that.$router.push('/home')
         } else {
