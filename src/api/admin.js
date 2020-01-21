@@ -11,3 +11,7 @@ export function add (data = {}) {
 export function getList (data = {}) {
   return post('/getAdmins', data)
 }
+
+export function getAdmin (data = {}) {
+  return post('/getAdmin', data)
+}

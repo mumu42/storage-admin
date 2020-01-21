@@ -15,8 +15,8 @@
 </template>
 <script>
 import { reactive, toRefs } from '@vue/composition-api'
-import { loginFun } from '../../api/admin.js'
-import { setToken } from '../../common'
+import { loginFun } from '@/api/admin.js'
+import { setToken } from '@/common'
 import md5 from 'js-md5'
 export default {
   setup(props, ctx) {
@@ -40,7 +40,7 @@ export default {
             userId: id
           })
           setToken({id})
-          that.$router.push('/home')
+          that.$router.push('/home/list')
         } else {
           that.$message.error(res.msg)
         }

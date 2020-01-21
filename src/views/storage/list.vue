@@ -41,8 +41,8 @@
 </template>
 <script>
 import { reactive, toRefs } from '@vue/composition-api'
-import TopHandle from '../../components/top-handle'
-import BottomHandle from '../../components/bottom-handle'
+import TopHandle from '@/components/top-handle'
+import BottomHandle from '@/components/bottom-handle'
 export default {
   components: {
     TopHandle,

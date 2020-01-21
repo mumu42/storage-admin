@@ -28,11 +28,14 @@ axios.interceptors.response.use((rs) => {
 })
 
 function request (params) {
-  return new Promise((resolve, reject) => {
+  return new Promise(async (resolve, reject) => {
     let param = {
       ...params
     }
-    const expires = getToken()
+    let expires = {}
+    await getToken().then(res => {
+      expires = res
+    })
     param['headers'] = {
       token: expires && expires.token,
       id: expires && expires.userId

@@ -10,11 +10,17 @@
 </template>
 <script>
 import { reactive, toRefs } from '@vue/composition-api'
+import { getToken } from '@/common'
+import { getAdmin } from '@/api/admin'
 export default {
+  name: 'navber',
   setup(props, ctx) {
+    const that = ctx.root
+    
     const state = reactive({
       isFold: false,
-      userName: ctx.root.$store.state.user.userName
+      userName: that.$store.state.user.userName,
+      token: ''
     })
     const sideFold = () => {
       ctx.emit('fold')
@@ -26,8 +32,32 @@ export default {
     }
     const outLogin = () => {
       window.localStorage.removeItem('expires')
-      ctx.root.$router.push('login')
+      that.$router.push('/login')
     }
+    const init = async () => {
+      await getToken().then(res => {
+        state.token = res
+      })
+      if (!state.token) {
+        that.$router.push('/login')
+        return
+      }
+      if (!state.userName) {
+        // 重新获取用户资料
+        getAdmin({id: state.token.userId}).then((res) => {
+          const { result } = res
+          if (res.code === 200) {
+            that.$store.commit('setUser', {
+              isAdmin: result.isAdmin,
+              userName: result.nickname,
+              userId: result.id
+            })
+            state.userName = result.nickname
+          }
+        })
+      }
+    }
+    init()
     return {
       sideFold,
       sideUnFold,
