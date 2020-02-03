@@ -8,16 +8,14 @@ module.exports = {
       }
     }
   },
-  resolve: {
-    alias: {
-      '@': path.resolve(__dirname, './src')
-    }
-  },
   chainWebpack: config => {
     config.module
       .rule('svg')
       .exclude.add(path.join(__dirname, '.', 'src/icons'))
       .end()
+
+    config.resolve.alias
+      .set('@', path.join(__dirname, './src'))
 
     config.module
       .rule('icons')
