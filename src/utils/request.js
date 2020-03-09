@@ -33,25 +33,30 @@ function request (params) {
       ...params
     }
     let expires = {}
-    await getToken().then(res => {
+    getToken().then(res => {
       expires = res
-    })
-    param['headers'] = {
-      token: expires && expires.token,
-      id: expires && expires.userId
-    }
-    axios(param).then(rs => {
-      if (rs.data.code === 403) {
-        Message({
-          message: '登录权限已失效，请重新登录~',
-          type: 'error'
-        })
+      // token信息不存在
+      if (!expires && window.location.href.indexOf('login') < 0) {
         window.location.href = window.location.origin
-      } else {
-        resolve(rs.data)
+        return
       }
-    }, (err) => {
-      reject(err)
+      param['headers'] = {
+        token: expires && expires.token,
+        id: expires && expires.userId
+      }
+      axios(param).then(rs => {
+        if (rs.data.code === 403) {
+          Message({
+            message: '登录权限已失效，请重新登录~',
+            type: 'error'
+          })
+          window.location.href = window.location.origin
+        } else {
+          resolve(rs.data)
+        }
+      }, (err) => {
+        reject(err)
+      })
     })
   })
 }

@@ -10,10 +10,13 @@ export default {
   name: 'app',
   setup(props, ctx) {
     const that = ctx.root
-    const expires = getToken()
-    if (!expires) {
-      that.$router.push('/login')
-    }
+    let expires
+    getToken().then(res => {
+      expires = res
+      if (!expires && window.location.href.indexOf('login') < 0) {
+        that.$router.push('/login')
+      }
+    })
   }
 }
 </script>

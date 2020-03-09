@@ -1,6 +1,6 @@
 <template>
   <div>
-    <top-handle @add="addAdmin" />
+    <top-handle @add="addAdmin" @download="download" />
     <el-table
       ref="multipleTable"
       :data="tableData"
@@ -41,10 +41,10 @@
   </div>
 </template>
 <script>
-import TopHandle from '../../components/top-handle'
-import BottomHandle from '../../components/bottom-handle'
+import TopHandle from '@/components/top-handle'
+import BottomHandle from '@/components/bottom-handle'
 import { toRefs, reactive } from '@vue/composition-api'
-import { add, getList } from '../../api/admin.js'
+import { add, getList, exportAdmin } from '@/api/admin.js'
 import md5 from 'js-md5'
 export default {
   name: 'admin',
@@ -97,6 +97,11 @@ export default {
         state.tableData = res.result
       }
     })
+    const download = () => {
+      exportAdmin().then(res => {
+        window.console.log(res)
+      })
+    }
     return {
       sizeBtn: 'small',
       addAdmin,
@@ -104,6 +109,7 @@ export default {
       del,
       updata,
       handleSelectionChange,
+      download,
       ...toRefs(state)
     }
   }

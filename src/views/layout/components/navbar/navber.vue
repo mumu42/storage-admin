@@ -35,27 +35,27 @@ export default {
       that.$router.push('/login')
     }
     const init = async () => {
-      await getToken().then(res => {
+      getToken().then(res => {
         state.token = res
+        if (!state.token && window.location.href.indexOf('login') < 0) {
+          that.$router.push('/login')
+          return
+        }
+        if (!state.userName) {
+          // 重新获取用户资料
+          getAdmin({id: state.token.userId}).then((res) => {
+            const { result } = res
+            if (res.code === 200) {
+              that.$store.commit('setUser', {
+                isAdmin: result.isAdmin,
+                userName: result.nickname,
+                userId: result.id
+              })
+              state.userName = result.nickname
+            }
+          })
+        }
       })
-      if (!state.token) {
-        that.$router.push('/login')
-        return
-      }
-      if (!state.userName) {
-        // 重新获取用户资料
-        getAdmin({id: state.token.userId}).then((res) => {
-          const { result } = res
-          if (res.code === 200) {
-            that.$store.commit('setUser', {
-              isAdmin: result.isAdmin,
-              userName: result.nickname,
-              userId: result.id
-            })
-            state.userName = result.nickname
-          }
-        })
-      }
     }
     init()
     return {
@@ -81,6 +81,7 @@ export default {
   float: right;
   span {
     margin: 0 10px;
+    cursor: pointer;
   }
 }
 </style>
