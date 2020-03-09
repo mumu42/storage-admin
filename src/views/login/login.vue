@@ -16,7 +16,6 @@
 <script>
 import { reactive, toRefs } from '@vue/composition-api'
 import { loginFun } from '@/api/admin.js'
-import { setToken } from '@/common'
 import md5 from 'js-md5'
 export default {
   setup(props, ctx) {
@@ -39,7 +38,12 @@ export default {
             userName: res.result.detail.nickname,
             userId: id
           })
-          setToken({id})
+          let expires = {
+            token: '',
+            date: '',
+            userId: id
+          }
+          window.localStorage.setItem('expires', JSON.stringify(expires))
           that.$router.push('/home/list')
         } else {
           that.$message.error(res.msg)

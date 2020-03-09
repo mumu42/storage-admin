@@ -12,14 +12,11 @@ export function getToken () {
       const now = new Date().getTime()
       const wordTime = 8 * 60 * 60 * 1000
       const distance = now - +expires.date
-      if (distance >= 25 * 60 * 1000 && distance < wordTime) {
+      if ((distance >= 25 * 60 * 1000 && distance < wordTime) || distance >= wordTime) {
         setToken({id: expires.userId}).then(res => {
           resolve(res)
         })
         return
-      } else if (distance >= wordTime) {
-        expires = ''
-        window.localStorage.removeItem('expires')
       }
       resolve(expires)
     } else {
